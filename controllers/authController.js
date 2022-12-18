@@ -20,6 +20,17 @@ exports.register = async (req, res) => {
         });
     }
 
+    if(user.email){
+        let err = {};
+        const isValid = verifyEmail(user.email, err);
+        if(!isValid){
+            return res.status(400).send({
+                status: 400,
+                message: err.message,
+            });
+        }
+    }
+
     if(user.password){
         let err = {};
         const isValid = verifyPassword(user.password, err);
@@ -87,7 +98,15 @@ const verifyPassword = (password,err) => {
     }
 }
 
-
+const verifyEmail = (email,err) => {
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    if(!emailRegex.test(email)){
+        return false;
+    }
+    else{
+        return true;
+    }
+};
 
 exports.login = async (req, res) => {
     User.findOne({
