@@ -30,3 +30,50 @@ exports.register = async (req, res) => {
     });
 };
 
+exports.login = async (req, res) => {
+    User.findOne({
+        email: req.body.email,
+    })
+    .exec((err, user) => {
+        if(err){
+            return res.status(400).send({
+                status: 400,
+                message: err.message,
+            });
+        }
+        if(!user){
+            return res.status(404).send({
+                status: 404,
+                message: 'User not found',
+            });
+        }
+
+        const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+        if(!passwordIsValid){
+            return res.status(401).send({
+                status: 401,
+                accessToken: null,
+                message: 'Invalid password',
+            });
+        }
+
+        const token = jwt.sign({ 
+            id: user.id, 
+            role: user.role 
+        }, 
+        process.env.SECRET_KEY, {
+            expiresIn: 86400,
+        });
+
+        res.status(200).send({
+            status: 200,
+            user: {
+                id: user._id,
+                fullName: user.firstName + user.lastName,
+                email: user.email,
+            },
+            accessToken: token,
+            message: 'User logged in successfully',
+        });
+    });
+};
