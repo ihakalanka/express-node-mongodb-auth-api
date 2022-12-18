@@ -17,6 +17,8 @@ exports.User = async (req, res) => {
 
             let allData = JSON.stringify(decode);
             let data = JSON.parse(allData);
+            /* console.log((new Date(data.exp * 1000).toLocaleTimeString()));
+            console.log((new Date().toLocaleTimeString())); */
         
             if(data.role === "admin"){
                 res.json({ 
