@@ -28,4 +28,20 @@ const verifyToken = (req, res, next) => {
     }
 };
 
+const checkRole = (req,res,next) => {
+    if(req.user.role === "admin"){
+        next();
+    }
+    else{
+        return res.status(400).send({
+            status: 400,
+            message: "Unauthorized",
+        });
+    }
+};
+
+/* const checkPermission = (req, res, next) => {
+
+}; */
+
 module.exports = verifyToken;

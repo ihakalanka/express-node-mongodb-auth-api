@@ -37,3 +37,9 @@ exports.User = async (req, res) => {
         });
     }
 };
+
+/* exports.addPermission = async (req, res) => {
+    try{
+        
+    }
+}; */

@@ -101,6 +101,7 @@ const verifyPassword = (password,err) => {
 const verifyEmail = (email,err) => {
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if(!emailRegex.test(email)){
+        err.message = "Email is not valid";
         return false;
     }
     else{
