@@ -40,8 +40,8 @@ const checkRole = (req,res,next) => {
     }
 };
 
-/* const checkPermission = (req, res, next) => {
-
-}; */
+const checkPermission = (req, res, next) => {
+    
+};
 
 module.exports = verifyToken;

@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
 
 const permissionSchema = new mongoose.Schema({
-    permissionName: {
+    permissionList: {
         type: String,
-        required: [true, 'Please enter permission name'],
+        required: [true, 'Please enter your permission'],
     },
-    releventUser: {
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    relevantUser: {
         type: String,
-        required: [true, 'Please enter relevent user'],
+        required: [true, 'Please enter your relevant user'],
     },
 });
-
-module.exports = mongoose.model('Permission', permissionSchema);
