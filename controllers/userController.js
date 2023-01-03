@@ -38,3 +38,11 @@ exports.User = async (req, res) => {
     }
 };
 
+exports.Admin = async (req, res) => {
+    try{
+        
+    }
+    catch{
+
+    }
+};

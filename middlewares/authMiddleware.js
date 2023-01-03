@@ -2,34 +2,42 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const verifyToken = (req, res, next) => {
-    if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split)[1], 'procces.env.SECRET_KEY', (err, decode) => {
-            if(err)req.user = undefined;
-            User.findOne({
-                _id: decode._id
-            })
-            .exec((err, user) => {
-                if(err){
-                    return res.status(400).send({
-                        status: 400,
-                        message: "Unauthenticated "+err.message,
-                    });
-                }
-                else{
-                    req.user = user;
-                    next();
-                }
-            })
-        }
+    if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        jwt.verify(req.headers.authorization.split(' ')[1], process.env.SECRET_KEY, (err, decode) => {
+            if(err){
+                return res.status(400).send({
+                    status: 400,
+                    message: "Unauthenticated "+err.message,
+                });
+            }
+            else{
+                User.findOne({
+                    id: decode.id
+                }).exec((err, user) => {
+                    if(err){
+                        return res.status(400).send({
+                            status: 400,
+                            message: "Unauthenticated "+err.message,
+                        });
+                    }
+                    else{
+                        next();
+                    }
+                });
+            }
+        });
     }
     else{
-        req.user = undefined;
-        next();
+        return res.status(400).send({
+            status: 400,
+            message: "Unauthenticated",
+        });
     }
 };
 
-const checkRole = (req,res,next) => {
-    if(req.user.role === "admin"){
+
+const checkPermission = (req, res, next) => {
+    if(req.user.permission === "write"){
         next();
     }
     else{
@@ -38,10 +46,6 @@ const checkRole = (req,res,next) => {
             message: "Unauthorized",
         });
     }
-};
-
-const checkPermission = (req, res, next) => {
-    
 };
 
 module.exports = verifyToken;
