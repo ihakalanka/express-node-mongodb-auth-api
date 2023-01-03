@@ -9,6 +9,7 @@ const VerifyToken = require('../middlewares/authMiddleware');
 
 Router.post('/register', AuthController.register);
 Router.post('/login', AuthController.login);
+/* Router.post('/logout', VerifyToken, AuthController.logout); */
 
 Router.get('/user', VerifyToken, UserController.User);
 
